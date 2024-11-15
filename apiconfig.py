@@ -8,7 +8,7 @@ API_INTERFACE = 'modwebapi'  # modwebapi
 WEBAPI_URL = 'https://example.com'
 WEBAPI_TOKEN = 'example-key'
 API_UPDATE_TIME = 60
-
+DeviceOnlineMinTraffic = 10
 """
 get port offset by node->name
 HK 1 #9900

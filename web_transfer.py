@@ -47,9 +47,13 @@ class WebTransfer(object):
         bandwidth_thistime = 0
 
         data = []
+        no_count_id = []
         for id in dt_transfer.keys():
             if dt_transfer[id][0] == 0 and dt_transfer[id][1] == 0:
                 continue
+            total = dt_transfer[id][0] + dt_transfer[id][1]
+            if total < int(get_config().DeviceOnlineMinTraffic) * 1000: # 流量小于 * kb 不上报IP，用于ping测试
+                no_count_id.appen(self.port_uid_table[id])
             data.append(
                 {
                     "u": dt_transfer[id][0],
@@ -71,8 +75,11 @@ class WebTransfer(object):
         online_iplist = ServerPool.get_instance().get_servers_iplist()
         data = []
         for port in online_iplist.keys():
-            for ip in online_iplist[port]:
-                data.append({"ip": ip, "user_id": self.port_uid_table[port]})
+            if self.port_uid_table[port] in no_count_id: # 这些ID在不上报的IDlist中。
+                continue
+            else:
+                for ip in online_iplist[port]:
+                    data.append({"ip": ip, "user_id": self.port_uid_table[port]})
         webapi.postApi(
             "users/aliveip", {"node_id": get_config().NODE_ID}, {"data": data}
         )
