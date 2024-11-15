@@ -53,7 +53,7 @@ class WebTransfer(object):
                 continue
             total = dt_transfer[id][0] + dt_transfer[id][1]
             if total < int(get_config().DeviceOnlineMinTraffic) * 1000: # 流量小于 * kb 不上报IP，用于ping测试
-                no_count_id.appen(self.port_uid_table[id])
+                no_count_id.append(self.port_uid_table[id])
             data.append(
                 {
                     "u": dt_transfer[id][0],
